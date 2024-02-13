@@ -20,4 +20,8 @@ spec:
             - containerPort: {{ .Values.app.service.port }}
           env:
           - name: MONGODB_URL
-            value: "mongodb://swimlate-mongodb:27017/yourdatabase"
+            value: "mongodb://swimlane-mongodb:27017/devops-practical"
+      securityContext:
+        fsGroup: 1000
+        runAsGroup: 1000
+        runAsUser: 1000

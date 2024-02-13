@@ -1,0 +1,12 @@
+---
+- name: Ensure NTP is installed
+  package:
+    name: ntp
+    state: present
+
+- name: Ensure NTP service is started
+  service:
+    name: ntp
+    state: started
+    enabled: yes
+  notify: Restart NTP

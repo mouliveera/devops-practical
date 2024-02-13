@@ -21,6 +21,10 @@ spec:
           volumeMounts:
             - name: mongo-persistent-storage
               mountPath: /data/db
+      securityContext:
+        fsGroup: 999
+        runAsGroup: 999
+        runAsUser: 999
   volumeClaimTemplates:
     - metadata:
         name: mongo-persistent-storage

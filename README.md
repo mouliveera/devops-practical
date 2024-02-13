@@ -132,3 +132,72 @@ kubectl port-forward svc/swimlate-devops-practical-chart -n dev 3001:3000
 
 - Demo article
 ![Alt text](image-3.png)
+
+- For Mongo, to form mongo as replicaSet, we can use the following commands. So that mongDB is highly available.
+
+```
+- Connect to one of the MongoDB instances
+mongo --host <hostname>:<port>
+
+- Initialize the replica set
+rs.initiate({
+   _id: "rs0",
+   members: [
+      { _id: 0, host: "swimlane-devops-practical-chart-mongodb-0:27017" },
+      { _id: 1, host: "swimlane-devops-practical-chart-mongodb-1:27017" },
+      { _id: 2, host: "swimlane-devops-practical-chart-mongodb-2:27017" }
+   ]
+})
+
+```
+---
+
+## Terraform
+- Since i have used Minikube. I have not used terraform create any nodes and other resources. I would like to add teraform code for nodePool creation on GKE.
+- Terraform files are available under folder "Terraform"
+- Initialise 
+```
+terraform init
+```
+- We can apply this configuration to create the GKE cluster:
+```
+# To check the drift
+terraform plan -var-file=dev.tfvars
+
+# To apply the changes
+terraform apply -var-file=dev.tfvars
+```
+
+---
+
+## Ansible
+
+- Folder location: `Ansible`
+- Create a role "swimlane-ntp" and playbook "ntp.yaml"
+- To test hosts
+```
+❯ ansible-playbook ntp.yaml -i inventory.ini -l worker_nodes --list-hosts
+
+playbook: ntp.yaml
+
+  play #1 (worker_nodes): worker_nodes  TAGS: []
+    pattern: ['worker_nodes']
+    hosts (2):
+      worker1
+      worker2
+---
+
+❯ ansible-playbook ntp.yaml -i inventory.ini -l worker_nodes --list-tasks
+
+playbook: ntp.yaml
+
+  play #1 (worker_nodes): worker_nodes  TAGS: []
+    tasks:
+      swimlane-ntp : Ensure NTP is installed    TAGS: []
+      swimlane-ntp : Ensure NTP service is started      TAGS: []
+
+---
+ansible-playbook ntp.yaml -i inventory.ini -l worker_nodes --dry-run
+```
+- Apply the changes
+
