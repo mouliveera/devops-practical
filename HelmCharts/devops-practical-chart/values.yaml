@@ -1,0 +1,29 @@
+# Application Deployment
+app:
+  image:
+    repository: devops-practical-app
+    tag: latest
+  replicas: 2
+  service:
+    port: 3000
+    type: ClusterIP
+  autoscaling:
+    enabled: true
+    targetCPUUtilizationPercentage: 80
+    minReplicas: 2
+    maxReplicas: 4
+
+# MongoDB Deployment
+mongodb:
+  image:
+    repository: mongo
+    tag: latest
+  replicas: 3
+  service:
+    port: 27017
+    type: ClusterIP
+
+# Ingress
+ingress:
+  enabled: false
+

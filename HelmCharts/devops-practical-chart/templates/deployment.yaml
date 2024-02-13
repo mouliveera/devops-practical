@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "devops-practical-chart.fullname" . }}
+spec:
+  replicas: {{ .Values.app.replicas }}
+  selector:
+    matchLabels:
+      app: {{ include "devops-practical-chart.fullname" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "devops-practical-chart.fullname" . }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: {{ .Values.app.image.repository }}:{{ .Values.app.image.tag }}
+          imagePullPolicy: Never
+          ports:
+            - containerPort: {{ .Values.app.service.port }}
+          env:
+          - name: MONGODB_URL
+            value: "mongodb://swimlate-mongodb:27017/yourdatabase"
